@@ -5,6 +5,7 @@ namespace PSP.Characters
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 7f;
+        [SerializeField] private float rotateSpeed = 10f;
 
         private void Update() {
             Vector2 inputVector = Vector2.zero;
@@ -26,9 +27,10 @@ namespace PSP.Characters
             }
 
             inputVector = inputVector.normalized;
-            Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+            Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
 
-            transform.position += moveDir * moveSpeed * Time.deltaTime;
+            transform.position += moveDirection * moveSpeed * Time.deltaTime;
+            transform.forward = Vector3.Slerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
         }
     }
 }
