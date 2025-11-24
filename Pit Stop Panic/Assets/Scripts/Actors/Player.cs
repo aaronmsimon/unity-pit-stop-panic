@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using UnityEngine;
 
 namespace PSP.Actors
@@ -20,6 +19,7 @@ namespace PSP.Actors
         [SerializeField] private Color raycastColor = Color.red;
 
         private Vector3 moveDirection;
+        private bool isWalking;
 
         private void OnEnable() {
             inputReader.moveEvent += OnMove;
@@ -61,7 +61,9 @@ namespace PSP.Actors
                 transform.position += moveDirection * moveDistance;
             }
             
+            isWalking = moveDirection != Vector3.zero;
             transform.forward = Vector3.Slerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
+
         }
 
         // ----- EVENT LISTENERS -----
@@ -76,5 +78,8 @@ namespace PSP.Actors
                 Debug.DrawRay(transform.position + Vector3.up * raycastHeight, moveDirection, raycastColor);
             }
         }
+
+        // ----- PROPERTIES -----
+        public bool IsWalking => isWalking;
     }
 }
