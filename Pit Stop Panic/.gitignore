@@ -72,4 +72,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Hide/Don't Upload Synty Assets
-/Assets/Polygon*/
+/Assets/Synty/Polygon*/
