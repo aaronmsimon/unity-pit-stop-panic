@@ -1,4 +1,6 @@
 using UnityEngine;
+using PSP.Items;
+using RoboRyanTron.Unite2017.Events;
 
 namespace PSP.Actors
 {
@@ -8,29 +10,37 @@ namespace PSP.Actors
         [SerializeField] private float moveSpeed = 7f;
         [SerializeField] private float rotateSpeed = 10f;
 
-        [Header("Settings")]
-        [SerializeField] private InputReader inputReader;
-
         [Header("Collisions")]
         [SerializeField] private float playerHeight = 1.8f;
         [SerializeField] private float playerRadius = 0.1f;
         [SerializeField] private float raycastHeight = 0.5f;
         [SerializeField] private bool showRaycast = false;
         [SerializeField] private Color raycastColor = Color.red;
+        [SerializeField] private LayerMask interactablesLayerMask;
+
+        [Header("Game Events")]
+        [SerializeField] private GameEvent interactableGameEvent;
+        [SerializeField] private SelectedObjectSO selectedObject;
+
+        [Header("Settings")]
+        [SerializeField] private InputReader inputReader;
 
         private Vector3 moveDirection;
         private bool isWalking;
 
         private void OnEnable() {
             inputReader.moveEvent += OnMove;
+            inputReader.interactEvent += OnInteract;
         }
 
         private void OnDisable() {
             inputReader.moveEvent -= OnMove;
+            inputReader.interactEvent -= OnInteract;
         }
 
         private void Update() {
             Move();
+            CheckInteractables();
         }
 
         private void Move() {
@@ -66,10 +76,29 @@ namespace PSP.Actors
 
         }
 
+        private void CheckInteractables() {
+            float interactDistance = 2;
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
+                if (hit.transform.TryGetComponent(out Highlight highlight)) {
+                    selectedObject.selectedObject = highlight.gameObject;
+                    interactableGameEvent.Raise();
+                } else {
+                    selectedObject.selectedObject = null;
+                    interactableGameEvent.Raise();
+                }
+            } else {
+                selectedObject.selectedObject = null;
+                interactableGameEvent.Raise();
+            }
+        }
+
         // ----- EVENT LISTENERS -----
         private void OnMove(Vector2 movement) {
             Vector2 inputVector = movement.normalized;
             moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        }
+
+        private void OnInteract() {
         }
 
         private void OnDrawGizmos()

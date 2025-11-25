@@ -7,6 +7,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 {
 	// Gameplay
 	public event UnityAction<Vector2> moveEvent;
+	public event UnityAction interactEvent;
 
 	private GameInput gameInput;
 
@@ -33,6 +34,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 		{
 			moveEvent?.Invoke(context.ReadValue<Vector2>());
 		}
+	}
+
+	public void OnInteract(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			interactEvent?.Invoke();
 	}
 
 	// Enable/Disable Action Maps
