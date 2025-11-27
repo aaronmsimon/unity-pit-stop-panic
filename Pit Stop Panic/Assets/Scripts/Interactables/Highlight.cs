@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PSP.Items
+namespace PSP.Interactables
 {
     public class Highlight : MonoBehaviour
     {

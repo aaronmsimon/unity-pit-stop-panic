@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PSP.Items
+namespace PSP.Interactables
 {
     [CreateAssetMenu(menuName = "Game/SelectedObject")]
     public class SelectedObjectSO : ScriptableObject

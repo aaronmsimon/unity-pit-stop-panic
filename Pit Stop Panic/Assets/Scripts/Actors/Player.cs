@@ -1,5 +1,5 @@
 using UnityEngine;
-using PSP.Items;
+using PSP.Interactables;
 using RoboRyanTron.Unite2017.Events;
 
 namespace PSP.Actors
@@ -17,6 +17,7 @@ namespace PSP.Actors
         [SerializeField] private bool showRaycast = false;
         [SerializeField] private Color raycastColor = Color.red;
         [SerializeField] private LayerMask interactablesLayerMask;
+        [SerializeField] private float interactDistance = 1;
 
         [Header("Game Events")]
         [SerializeField] private GameEvent interactableGameEvent;
@@ -77,7 +78,6 @@ namespace PSP.Actors
         }
 
         private void CheckInteractables() {
-            float interactDistance = 2;
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
                 if (hit.transform.TryGetComponent(out Highlight highlight)) {
                     selectedObject.selectedObject = highlight.gameObject;
@@ -99,6 +99,11 @@ namespace PSP.Actors
         }
 
         private void OnInteract() {
+            if (Physics.Raycast(transform.position + transform.up * .5f, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
+                if (hit.transform.TryGetComponent(out IInteractable interactable)) {
+                    interactable.Interact(gameObject);
+                }
+            }
         }
 
         private void OnDrawGizmos()
