@@ -54,7 +54,7 @@ namespace PSP.Actors
                 // Try X only
                 Vector3 moveDirX = new Vector3(moveDirection.x, 0f, 0f).normalized;
                 canMove = !Physics.CapsuleCast(p1, p2, playerRadius, moveDirX, moveDistance);
-
+                
                 if (canMove) {
                     moveDirection = moveDirX;
                 } else {

@@ -4,6 +4,6 @@ namespace PSP.Interactables
 {
     public interface IInteractable
     {
-        public void Interact(GameObject interacter);
+        public void Interact(GameObject interactor);
     }
 }
