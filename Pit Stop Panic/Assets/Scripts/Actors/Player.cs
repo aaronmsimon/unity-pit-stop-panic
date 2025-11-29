@@ -80,16 +80,18 @@ namespace PSP.Actors
         private void CheckInteractables() {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
                 if (hit.transform.TryGetComponent(out Highlight highlight)) {
-                    selectedObject.selectedObject = highlight.gameObject;
-                    interactableGameEvent.Raise();
+                    SetSelectedObject(highlight.gameObject);
                 } else {
-                    selectedObject.selectedObject = null;
-                    interactableGameEvent.Raise();
+                    SetSelectedObject(null);
                 }
             } else {
-                selectedObject.selectedObject = null;
-                interactableGameEvent.Raise();
+                SetSelectedObject(null);
             }
+        }
+
+        private void SetSelectedObject(GameObject gameObject) {
+            selectedObject.selectedObject = gameObject;
+            interactableGameEvent.Raise();
         }
 
         // ----- EVENT LISTENERS -----
