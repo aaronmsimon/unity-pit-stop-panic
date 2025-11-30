@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PSP.Items
 {
-    public class Tire : MonoBehaviour
+    public class Tire : GarageObject
     {
         private BoxCollider boxCollider;
 

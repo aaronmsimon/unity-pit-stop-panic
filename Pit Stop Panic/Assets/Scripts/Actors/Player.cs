@@ -1,10 +1,12 @@
 using UnityEngine;
 using PSP.Interactables;
 using RoboRyanTron.Unite2017.Events;
+using PSP.Items;
+using PSP.Vehicles;
 
 namespace PSP.Actors
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IGarageObjectParent
     {
         [Header("Movement")]
         [SerializeField] private float moveSpeed = 7f;
@@ -19,6 +21,9 @@ namespace PSP.Actors
         [SerializeField] private LayerMask interactablesLayerMask;
         [SerializeField] private float interactDistance = 1;
 
+        [Header("Objects")]
+        [SerializeField] private Transform objectHoldPoint;
+
         [Header("Game Events")]
         [SerializeField] private GameEvent interactableGameEvent;
         [SerializeField] private SelectedObjectSO selectedObject;
@@ -28,6 +33,7 @@ namespace PSP.Actors
 
         private Vector3 moveDirection;
         private bool isWalking;
+        private GarageObject garageObject;
 
         private void OnEnable() {
             inputReader.moveEvent += OnMove;
@@ -78,7 +84,7 @@ namespace PSP.Actors
         }
 
         private void CheckInteractables() {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
+            if (Physics.Raycast(transform.position + transform.up * .5f, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
                 if (hit.transform.TryGetComponent(out Highlight highlight)) {
                     SetSelectedObject(highlight.gameObject);
                 } else {
@@ -94,6 +100,27 @@ namespace PSP.Actors
             interactableGameEvent.Raise();
         }
 
+        // ----- IGarageObjectParent Implementation
+        public Transform GetGarageObjectFollowTransform() {
+            return objectHoldPoint;
+        }
+        
+        public void SetGarageObject(GarageObject garageObject) {
+            this.garageObject = garageObject;
+        }
+
+        public GarageObject GetGarageObject() {
+            return garageObject;
+        }
+
+        public void ClearGarageObject() {
+            garageObject = null;
+        }
+
+        public bool HasGarageObject() {
+            return garageObject != null;
+        }
+
         // ----- EVENT LISTENERS -----
         private void OnMove(Vector2 movement) {
             Vector2 inputVector = movement.normalized;
@@ -102,8 +129,8 @@ namespace PSP.Actors
 
         private void OnInteract() {
             if (Physics.Raycast(transform.position + transform.up * .5f, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
-                if (hit.transform.TryGetComponent(out IInteractable interactable)) {
-                    interactable.Interact(gameObject);
+                if (hit.transform.TryGetComponent(out WheelPoint wheelPoint)) {
+                    wheelPoint.Interact(this);
                 }
             }
         }
