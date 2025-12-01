@@ -1,4 +1,5 @@
 using UnityEngine;
+using PSP.Actors;
 
 namespace PSP.Interactables
 {
@@ -6,10 +7,13 @@ namespace PSP.Interactables
     {
         [SerializeField] private GameObject tirePrefab;
 
-        public void Interact(GameObject interactor)
+        public void Interact(Player player)
         {
             GameObject tire = Instantiate(tirePrefab, transform);
             tire.transform.localPosition = Vector3.zero;
+
+            // Tire tire = Instantiate(tirePrefab, wheelPoint.transform);
+            // tire.SetGarageObjectParent(wheelPoint);
         }
     }
 }

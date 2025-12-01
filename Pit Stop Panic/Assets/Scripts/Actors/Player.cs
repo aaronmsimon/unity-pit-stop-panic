@@ -129,8 +129,8 @@ namespace PSP.Actors
 
         private void OnInteract() {
             if (Physics.Raycast(transform.position + transform.up * .5f, transform.forward, out RaycastHit hit, interactDistance, interactablesLayerMask)) {
-                if (hit.transform.TryGetComponent(out WheelPoint wheelPoint)) {
-                    wheelPoint.Interact(this);
+                if (hit.transform.TryGetComponent(out IInteractable interactable)) {
+                    interactable.Interact(this);
                 }
             }
         }

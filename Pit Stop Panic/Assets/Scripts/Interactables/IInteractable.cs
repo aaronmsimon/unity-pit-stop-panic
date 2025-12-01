@@ -1,9 +1,9 @@
-using UnityEngine;
+using PSP.Actors;
 
 namespace PSP.Interactables
 {
     public interface IInteractable
     {
-        public void Interact(GameObject interactor);
+        public void Interact(Player player);
     }
 }

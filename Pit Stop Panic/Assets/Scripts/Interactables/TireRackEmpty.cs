@@ -1,26 +1,26 @@
 using UnityEngine;
 using PSP.Items;
 using PSP.Actors;
-using PSP.Interactables;
 
-namespace PSP.Vehicles
+namespace PSP.Interactables
 {
-    public class WheelPoint : MonoBehaviour, IGarageObjectParent, IInteractable
+    public class TireRackEmpty : MonoBehaviour, IInteractable, IGarageObjectParent
     {
+        [SerializeField] private Transform wheelHoldPos;
+
         private GarageObject garageObject;
 
         public void Interact(Player player) {
-            if (HasGarageObject()) {
-                GetGarageObject().SetGarageObjectParent(player);
-            } else {
-                GarageObject garageObject = player.GetGarageObject();
+            Debug.Log("interacted!");
+            if (player.TryGetComponent(out IGarageObjectParent garageObjectParent)) {
+                GarageObject garageObject = garageObjectParent.GetGarageObject();
                 garageObject.SetGarageObjectParent(this);
                 garageObject.transform.localEulerAngles = Vector3.zero;
             }
         }
 
         public Transform GetGarageObjectFollowTransform() {
-            return transform;
+            return wheelHoldPos.transform;
         }
         
         public void SetGarageObject(GarageObject garageObject) {
