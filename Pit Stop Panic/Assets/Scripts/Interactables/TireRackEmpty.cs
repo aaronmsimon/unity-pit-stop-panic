@@ -6,21 +6,26 @@ namespace PSP.Interactables
 {
     public class TireRackEmpty : MonoBehaviour, IInteractable, IGarageObjectParent
     {
-        [SerializeField] private Transform wheelHoldPos;
+        [SerializeField] private Transform[] wheelHoldPositions;
 
+        private int wheelIndex;
         private GarageObject garageObject;
 
+        private void Awake() {
+            wheelIndex = 0;
+        }
+
         public void Interact(Player player) {
-            Debug.Log("interacted!");
             if (player.TryGetComponent(out IGarageObjectParent garageObjectParent)) {
                 GarageObject garageObject = garageObjectParent.GetGarageObject();
                 garageObject.SetGarageObjectParent(this);
                 garageObject.transform.localEulerAngles = Vector3.zero;
+                wheelIndex++;
             }
         }
 
         public Transform GetGarageObjectFollowTransform() {
-            return wheelHoldPos.transform;
+            return wheelHoldPositions[wheelIndex].transform;
         }
         
         public void SetGarageObject(GarageObject garageObject) {
@@ -36,7 +41,7 @@ namespace PSP.Interactables
         }
 
         public bool HasGarageObject() {
-            return garageObject != null;
+            return false;
         }
     }
 }
