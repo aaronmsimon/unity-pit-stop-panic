@@ -1,19 +1,19 @@
 using UnityEngine;
 using PSP.Actors;
+using PSP.Items;
 
 namespace PSP.Interactables
 {
     public class TireRack : MonoBehaviour, IInteractable
     {
-        [SerializeField] private GameObject tirePrefab;
+        [SerializeField] private GarageObject tirePrefab;
 
         public void Interact(Player player)
         {
-            GameObject tire = Instantiate(tirePrefab, transform);
+            GarageObject tire = Instantiate(tirePrefab);
             tire.transform.localPosition = Vector3.zero;
-
-            // Tire tire = Instantiate(tirePrefab, wheelPoint.transform);
-            // tire.SetGarageObjectParent(wheelPoint);
+            tire.SetGarageObjectParent(player);
+            tire.transform.localEulerAngles = Vector3.zero;
         }
     }
 }
